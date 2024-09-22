@@ -1,0 +1,17 @@
+abort(404) 
+digunakan agar menjadikan halaman menjadi eror atau not found, contoh :
+ketika user mengakses halaman /post tapi itu tidak ada maka yang ditampilkan adalah 404 atau not found jika diberi abort 
+
+
+===============================================================================================
+
+
+cara membuat model
+1. buka terminal dan ketikan :
+php artisan make:model Nama_Model
+
+ketika membuat model diusahakan membuat migration nya juga 
+
+
+
+

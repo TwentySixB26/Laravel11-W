@@ -1,0 +1,165 @@
+Pembahasan 
+
+1. Component 
+digunakan untuk menyimpan bagian-bagian yang nantinya akan digunakan didalam view yang lain seperti navbar,karena akan sanggat repot jika setiap view diberi navbar secara satu satu, untuk membuat component :
+untuk membuat component nama awal file nya harus huruf kapital!
+
+- php artisan make:component Alert 
+//alert nama component yang ingin dibuat 
+// jika membuat alert nya tanpa mengunaakan --view maka pada folder app akan dibuatkan view juga yang berisikan nama folder yang telah dibuat tadi atau sebuah class, fungsi nya adalah jika anda ingin memanipulasi elemen nya.
+
+
+- php artisan make:component forms.input --view
+
+
+untuk memangil component :
+<x-package-alert/>
+//alert diambil dari nama component yang diberikan sebelumnya 
+
+
+2. layouts 
+Layout digunakan untuk mengatur kerangka umum dari halaman web. Biasanya, layout mencakup elemen-elemen yang konsisten di seluruh halaman, seperti header, footer, dan sidebar.
+
+cara membuat layout :
+php artisan make:component Layout 
+
+
+
+
+
+=================================================================================================================
+
+
+Memperbaiki style halaman menggunakan TailwindCSS
+
+1. buat komponen untuk navbar 
+php artisan make:component Navbar 
+
+
+2. pindahkan tag navbar beserta isinya yang ada di file home.blade.php ke dalam file navbar.blade.php 
+
+
+3. tampilkan isi dari navbar.blade.php di dalam home dengan cara :
+<x-navbar></x-navbar>
+
+
+4. jadikan header menjadi komponen terpisah, sama seperti navbar , caranya adalah :
+php artisan make:component Header --view 
+
+
+5.  pindahkan tag header beserta isinya yang ada di file home.blade.php ke dalam file header.blade.php 
+
+
+6. 3. tampilkan isi dari navbar.blade.php di dalam home dengan cara :
+<x-header></x-header>
+
+
+7. perbaiki codingan menjadi :
+- <x-header>Home Page</x-header>
+//Home page bisa diganti sesuai dengan halaman mana yang sedang aktiv,jika blog maka ganti dengan blog 
+
+- <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{ $slot }}</h1>
+serta berikan {{ $slot }} agar text home page dapat tampil
+
+
+
+=================================================================================================================
+
+membuat layout 
+
+1. buat layout terlebih dahulu :
+php artisan make:component Layout 
+
+
+2. pindahkan semua code yang ada di home.blade.php ke dalam file layout.blade.php
+
+
+3. buka file home.blade.php dan berikan code untuk memangil isi dari layout :
+
+<x-layout>
+    <h3>ini adalah halaman Home Page</h3>
+</x-layout>
+
+berikan code tersebut di tiap tiap file yang ingin mengunakan elemen tersebut seperti blog,contact dan about
+
+
+
+=================================================================================================================
+
+memperbaiki tampilan agar header tidak berisikan "Home page" semua 
+
+jadi yang akan dilakukan adalah ketika membuka about atau yg lain maka yang tampil pada header adalah about,bukan home page cara untuk mencegah nya adalah mengirim sebuah parameter di sebuah route
+
+1. buka file web.php berikan parameter title disetiap route seperti ini :
+Route::get('/', function () {
+    return view('home', [
+        'title' => 'Home Page'
+    ]);
+});
+
+
+
+2. buka file home.blade.php tambahkan code ini didalam tag x-layout :
+<x-slot:title> {{ $title }} </x-slot:title>
+// fungsi dari tag x-slot:title tersebut adalah mengirim variabel $title ke file layout untuk digunakan. $title mengambil dari route, karena $title tidak bisa mengakses nya langsung makanya harus dikirim lagi oleh home.blade.php agar $title dari route dapat di akses 
+
+
+
+3. buka file layout.blade.php dan pangil $title, maka yang sebelumnya eror dapat bisa diakses 
+<x-header> {{ $title }} </x-header>
+
+
+=================================================================================================================
+
+memperbaiki halaman yang sedang aktiv pada navbar :
+
+1. buka file navbar.blade.php 
+berikan code ini pada class di tiap tiap menu (tag a):
+{{ request()->is('/') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }} 
+
+//reuest merujuk pada link/url, jadi request diambil dari link dan mengecek apakah link tersebut (is) bernilai "/" atau bukan jika iya maka akan bernilai true dan mengeksekusi logika yg pertama 
+
+sudah benar dan jalan tapi dapat membuat file nya menjadi banyak tag dan kotor, oleh sebab itu harus diperbaiki lagi dan diubah menjadi komponen :
+
+1. buat komponen :
+php artisan make:component NavLink --view 
+
+
+2. buka file nav-link dan masukan tag a disitu dan hapus href nya, karena href akan dikirim melalui home :
+<a  class="{{ request()->is('/') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium " aria-current="page">{{ $slot }}</a>
+
+
+3. buka file navbar.blade.php dan ubah komponen tag a nya/hapus agar menjadi :
+<x-nav-link href="/"> Home </x-nav-link>
+
+
+4.  buka file nav-link dan berikan code ini didalam tag a agar href bisa diambil:
+{{  $attributes }}
+//memasukan semua attribute yang dikirim melalui tag x-nav-link
+
+
+agar lebih sederhana lagi 
+1. buka file nav-link hapus  request()->is('/') pada tag a dan ganti menjadi variabel $active, full code  :
+<a {{  $attributes }} class="{{ $active ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium " aria-current="page">{{ $slot }}</a>
+
+
+2. buka file navbar.blade.php dan tambahkan logika ini :
+:active="request()->is('/')
+
+full code : 
+<x-nav-link href="/" :active="request()->is('/')">Home</x-nav-link>
+//: mengartikan bahwa nilai yang dikirim berbentuk booelan bukan text/string
+
+fungsinya adalah agar variabel active dapat digunakan sebagai class di dalam tag a yang ada di nav-link 
+
+jika code sebelumnya tidak diperbaiki akan terjadi eror ketika tag ini ditulis berulang ulang dengan href yg berbeda 
+<x-nav-link href="/"> Home </x-nav-link>
+
+karena di file nav-link sebelumnya :
+<a {{  $attributes }} class="{{ request()->is('/') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium " aria-current="page">{{ $slot }}</a>
+
+karena menuliskan baris code hanya itu maka navbar hanya mengecek '/' dan menu blog dan yang lain tidak akan jalan 
+oleh sebab itu harus membuat tag tersebut dapat digunakan berkali kali. 
+
+cara lain untuk mengatasi hal serupa seperti itu adalah pada file nav-link harus ditulis beberapa kali sesuai banyak nya menu yg ada di navbar bukan cuma satu seperti sekarang, dan {{ $attributes }} hapus serta href ditulis kembali dan $slot juga dihapus dan diisi secara manual. dan pada file navbar.blade.php hanya dituliskan satu code saja dan tidak bisa mengirimkan isi untuk slot dan href 
+

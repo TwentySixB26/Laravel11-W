@@ -1,0 +1,70 @@
+mengubah setingan service dan port :
+
+1. klik menu setting dipojok kanan atas 
+
+2. masuk ke menu services & ports 
+
+3. uncheck apache 
+
+4. ceklis Nginx
+
+
+
+========================================================================================
+
+menginstal ekstensi php :
+
+1. klik kanan 
+
+2. cari menu php 
+
+3. klik ekstensions 
+
+4. ceklis pdo_sqlite, sqlite3 dan zip 
+
+
+========================================================================================
+
+install laravel 11 
+
+- composer create-project laravel/laravel example-app
+
+- cd example-app
+ 
+- php artisan serve
+
+
+=============================================================================================
+
+VIRTUAL HOST ERROR
+Untuk yang mengalami kendala [dot]test tidak jalan bisa pake cara ini. punyaku bisa.
+
+1. Stop All pada Laragon
+2. Close Laragon
+3. Masuk directori C:\Windows\System32\drivers\etc
+4. Klik kanan file "Host"
+5. Pilih Properties
+6. Hilangkan centang pada "Read-only"
+7. Klik Ok.
+8. Pilih continue jika ada pertanyaan muncul
+9. Buka Laragon dengan Run As Administrator
+10. Start All
+11. nama-site[dot]test sudah bisa dibuka
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

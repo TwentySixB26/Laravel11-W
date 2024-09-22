@@ -1,0 +1,77 @@
+Cara membuat data dummy mengunakan factory/faker mengunakan cmd :
+
+1. buka terminal :
+php artisan tinker 
+
+2. tulis juga di diterminal
+App\Models\User::factory(5)->create() ; //akan dibuat user random sebanyak 5 orang 
+
+
+==========================================================================================
+
+
+cara membuat data dummy mengunakan method lain atau mengubah state,seperti contohnya yang ada di UserFactory.php 
+disitu bisa mengunakan method admin() agar data nya bernilai true karena defaultnya sudah di setting false
+pada folder migration nya :
+
+1. buka terminal :
+php artisan tinker 
+
+2. buat data random sebanyak 5 
+App\Models\User::factory(5)->create() ;
+
+3. buat data random sebanyak 5 yang belum terverifikasi 
+App\Models\User::factory(5)->unverified()->create() ;
+
+4. buat data random sebanyak 1 user yang sudah terverifikasi dan is_admin nya adalah true
+App\Models\User::factory()->admin()->create() ;
+
+
+========================================================================================================
+
+
+cara membuat data dummy tapi data nya berdasarkan indonesia,seperti nama orang indonesia ataupun hal 
+lain yang mempunyai unsur indonesia :
+
+1. buka file .env 
+
+2. cari APP_FAKER_LOCALE
+
+3. ganti code faker sebelumnya dengan id_ID maka hasilnya : 
+APP_FAKER_LOCALE=id_ID
+
+
+=============================================================================================================
+
+
+cara membuat factory sendiri 
+
+1. buat factory terlebih dahulu 
+php artisan make:factory NamaFactory 
+
+//nama file awalnya harus kapital dan harus diberi embel embel Factory
+
+
+
+2. buka file PostFactory 
+cari method definition dan tulis disitu apa saja yang hendak diberikan faker,seperti ini contohnya :
+
+public function definition(): array
+    {
+        //bagian ini yang perlu diperhatikan
+        return [
+            'title' => fake()->sentence(8) ,
+            'author' => fake()->name() ,
+            'slug' => Str::slug(fake()->sentence()), //str::slug digunakan untuk mengenerate string menjadi slug
+            'body' => fake()->text()
+        ];
+        //
+    }
+
+
+
+3. buka terminal untuk membuat fakernya 
+php artisan tinker 
+
+
+4. App\Models\Post::factory(10)->create() ;

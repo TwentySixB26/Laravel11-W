@@ -1,0 +1,55 @@
+
+Membuat Migrasi :
+
+1. buka terminal 
+php artisan make:migration create_flights_table
+
+
+=================================================================================================
+
+Menjalankan migrasi
+
+untuk menjalankan perintah migrasi atau agar bisa dikirim ke database adalah caranya :
+1. buka terminal :
+cara 1 
+php artisan migrate 
+
+cara 2 
+php artisan migrate:fresh
+
+
+
+=====================================================================================================
+
+membuat table post 
+
+1. buka terminal :
+php artisan make:migration create_posts_table
+
+
+2. buat schema untuk create_posts_table simpan di up() dan simpan didalam Schema::create  :
+            $table->id();
+            $table->string('title') ;
+            $table->string('author') ;
+            $table->string('slug')->unique() ;
+            $table->text('body') ;
+            $table->timestamps();
+
+
+3. lakukan migrasi agar scema yang telah dibuat masuk ke dalam database :
+php artisan migrate:fresh
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

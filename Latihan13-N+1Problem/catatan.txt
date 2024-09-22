@@ -1,0 +1,66 @@
+cara mengecek atau seberapa sering data kita dilakukan development mengunakan debugbar laravel :
+
+1. buka terminal dan instal debugbar :
+composer require barryvdh/laravel-debugbar --dev
+
+2. refresh halaman,maka akan tampil bar nya dibawah web
+
+
+===================================================================================
+
+cara menangani N+1 Problem yaitu eager Loading:
+
+1. buka web.php tambahkan code with() pada codingan anda,contoh : 
+Route::get('/posts', function () {
+    $posts = Post::with(['author','category'])->latest()->get() ; 
+    //with simpan disini,untuk parameternya kenapa bisa author dan category tergantung pada method yang dibuat pada models Post 
+    //harus mengunakan get(), karena jika mengunakan all() tidak bisa karena kita memberikan embel embel with dan latest 
+
+    return view('/posts' , [
+        'title' => 'Blog',
+        'posts' => $posts
+    ]);
+});
+
+//code diatas hanya bisa dilakukan ketika data mengambil dari table lain,seperti post mengambil data dari category dan user,jika untuk menangani masalah data user yang diambil oleh post maka itu beda lagi caranya 
+
+
+
+
+cara menangani N+1 Problem yaitu  lazy eager Loading:
+//cara ini dilakukan ketika data nya sudah dikerjakan terlebih dahulu seperti author dan category contohnya seperti ini, ketika kita menampilkan semua post maka semua post akan tampil dan jika kita mengklik author nya maka akan dicarikan semua data berdasarkan author tersebut, oleh sebab itu datanya sudah dieksekusi terlebih dahulu sebelum masuk ke routher oleh sebab itu kita tidak bisa mengunakan with()
+
+1. buka web.php caranya adalah mengunakan load(),ini contoh full codenya :
+Route::get('/authors/{user:username}', function (User $user) {
+    $posts = $user->posts->load(['category','author']) ;
+    return view('posts',[
+        'title' => count($posts) . ' Artikels by '. $user->name ,
+        'posts' => $posts
+    ]) ;
+});
+
+
+
+===================================================================================
+
+cara menangani N+1 Problem dengan gampang :
+
+1. buka file post.php dan tambahkan $with, seperti ini contoh codenya : 
+protected $with = ['author','category'] ; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

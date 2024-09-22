@@ -1,0 +1,61 @@
+cara membuat relasi antara tabel users dengan posts 
+
+cara ke 1 
+1. buka file create_posts_table lalu tambahkan :
+$table->unsignedBigInteger('author_id') ;    //kenapa unsignedBigInteger?karena default dari id adalah tipe datanya itu 
+$table->foreign('author_id')->references('id')->on('users') ;   //agar dapat terhubung antara tabel users dengan post
+
+
+2. buka terminal dan lakukan :
+php artisan migrate:fresh
+
+
+
+cara ke 2 
+1. buka file create_posts_table lalu tambahkan :
+$table->foreignId('author_id')->constrained(
+    table:'users' ,     //berelasi dengan table mana 
+    indexName: 'posts_author_id'
+) ; 
+
+
+2. buka terminal dan lakukan :
+php artisan migrate:fresh
+
+
+=========================================================================================================
+
+
+cara menambahkan data dummy yang mempunyai relasi mengunakan faker :
+
+1. buka file PostFactory dan tambahkan code berikut 
+'author_id' => User::factory() , //data diambil table user 
+
+
+2. buka terminal :
+php artisan tinker 
+
+
+3. App\Models\Post::factory(25)->recycle(User::factory(3)->create())->create()
+//recycle digunakan untuk menyisipkan data apa yang ingin ingin dibuat,dan data tersebut akan digunakan didalam table pembungkusnya 
+
+
+====================================================================================================
+
+cara menghubungkan 
+
+1. buka file Post.php dan tambahkan code ini agar dapat terhubung :
+//nama method nya bebas dan belongsTo adalah hubungan nya, karena tabel post mengambil data dari user dan hubunganya adalah one to manny 
+
+public function author():BelongsTo{
+    return $this->belongsTo(User::class) ; 
+}
+
+
+2. buka file User.php 
+//nama method nya bebas dan hasMany adalah hubungan nya, karena tabel user diambil data nya oleh table Post dan hubunganya adalah many to one
+public function posts():HasMany{
+    return $this->hasMany(Post::class,'author_id') ; //karena nama tabel yang berelasinya adalah nya author_id 
+}
+
+

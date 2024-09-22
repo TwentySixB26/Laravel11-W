@@ -1,0 +1,149 @@
+membuat navbar sebagai halaman navigasi mengunakan tailwind css
+
+1. Buat laravel 
+
+2. arahkan file ke laravel 
+
+3. install tailwind :
+npm install -D tailwindcss postcss autoprefixer
+
+npx tailwindcss init -p
+
+
+4. install sukses 
+
+
+5. buka file tailwind.config.css dan ganti semua code nya dengan :
+
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./resources/**/*.blade.php",
+    "./resources/**/*.js",
+    "./resources/**/*.vue",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+
+
+
+6. buka folder resources/css/app.css dan berikan code ini :
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+7. setiap ingin menjalankan tailwind harus menuliskan ini diterminal bukan hanya menjalankan laravel nya saja :
+npm run dev
+
+
+8. tambahkan code ini di bagian head, agar tailwind nya bisa digunakan :
+ @vite('resources/css/app.css')
+
+
+9. agar tampilanya lebih sesuai pada tag html tambahkan :
+class="h-full bg-gray-100"
+
+
+10. agar tampilanya lebih sesuai juga pada tag body :
+class="h-full"
+
+
+11. code ini optional,karena hanya untuk memperbaiki font saja :
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+
+
+
+12. jika menambahkan apa yang ada di no 11 maka harus diperbaiki juga config nya dengan menambahkan code ini,simpan di bagian extends:
+const defaultTheme = require('tailwindcss/defaultTheme') 	//ini disimpan di paling atas, jangan di extends
+
+
+ fontFamily: {
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+      },
+
+
+
+==============================================================================================================================================
+
+
+memperbaiki teamplate navbar pakai java script 
+
+1. agar bisa mengunakan js nya,pakai saja framework alpine.js agar lebih mudah dan simpel, dengan cara menambahkan script ini didlam tag head :
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+
+2. cari tombol button dan tambahkan code ini,ini digunakan untuk profile dihalaman ukuran lg :
+@click="isOpen = !isOpen"
+
+ketika IsOpen bernilai false maka tidak akan menampilkan menu diprofile,jika bernilai true maka akan ditampilkan
+
+
+
+3. simpan code ini di tag nav :
+x-data="{ isOpen: false }"
+
+
+4. masukan transisi nya di dalam tag div yang ada komentarnya:
+x-show="isOpen"
+    x-transition:enter="transition ease-out duration-100 transform"
+    x-transition:enter-start="opacity-0 scale-95"
+    x-transition:enter-end="opacity-100 scale-100"
+    x-transition:leave="transition ease-in duration-75 transform"
+    x-transition:leave-start="opacity-100 scale-100"
+    x-transition:leave-end="opacity-0 scale-95"
+
+ini digunakan untuk melakukan transisi pada profile jika isOpen bernilai true 
+
+
+
+
+5. berikan juga code ini ketika button dalam keaadan mobile :
+@click="isOpen = !isOpen"
+
+ketika hamburger menu pada ukuran mobile dan di klik hamburgernya
+
+
+
+6. masuk ke svg dan tambahkan, jika true maka akan hidden tapi jika false maka akan block  :
+:class="{'hidden': isOpen, 'block': !isOpen }"
+
+ketika isOpen bernilai true maka logo hamburger menu akan hilang,dan ketika false maka logo hamburger menu akan kembali muncul
+
+
+
+7. scroll ke bawah,maka akan menemukan komentar lagi disvg,maka tambahkan :
+ :class="{'block': isOpen, 'hidden': !isOpen }" 
+
+
+ketika isOpen bernilai true maka logo X  akan muncul,dan ketika false maka logo X akan kembali hilang
+
+
+
+
+8. scroll lagi ke bawah,makan menemukan komentar dibagian div,maka berikan code ini pada div tersebut :
+x-show="isOpen" 
+
+ketika ukuran mobile dan hamburger menu tidak di klik maka isOpen akan bernilai false maka semua menu yang ada dinavbar
+tidak akan muncul, jika hamburger menu diklik maka isOpen akan bernilai true dan akan membuat semua menu yg ada di navbar akan 
+muncul 
+
+
+
+==============================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+

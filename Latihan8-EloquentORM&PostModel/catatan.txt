@@ -1,0 +1,50 @@
+Eloquent ORM (Object-Relational Mapping) 
+adalah sistem ORM bawaan Laravel yang menyediakan cara yang sederhana dan elegan untuk berinteraksi dengan database. Eloquent memetakan setiap tabel di database menjadi sebuah model PHP, sehingga data di dalam tabel dapat diakses dan dimanipulasi menggunakan objek.
+
+
+=======================================================================================
+
+menambahkan data/insert data melalui cmd ke dalam tabel post
+
+1. buka terminal lalu tulis :
+php artisan tinker 
+
+
+2. buka file Post tambahkan guarded/fillable
+guarded = data apa saja yang tidak  oleh diisi
+fillable = data apa saja yang boleh diisi 
+
+contoh codingan :
+protected $guarded = ['id'];
+//simpan code tersebut di dalam Models/Post.php
+
+
+3. buka terminal dan masukan data :
+App\Models\Post::create([
+    'title' => 'judul artikel 6' , 
+    'slug' => 'judul-artikel-6' ,
+    'author' => 'Bayu Aji Nugroho' , 
+    'body' => '        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facere at quaerat molestiae est amet vero nemo voluptate cupiditate alias magnam neque voluptates ad nulla, repudiandae et. Unde nam quasi soluta obcaecati cupiditate? Aspernatur possimus, nisi aliquid quod inventore neque porro sint reiciendis deleniti, at aliquam, facilis quo esse perspiciatis aperiam repudiandae necessitatibus explicabo id sunt ex sapiente vel fuga quidem? Impedit in voluptatum modi commodi illo autem praesentium soluta iure? Unde qui cumque ab, vel quisquam repellat dolor sunt suscipit?'
+])
+
+
+
+
+==============================================================================================
+
+membuat model beserta migration nya :
+
+1. buka terminal dan ketikan :
+php artisan make:model Post -m 
+
+nama model harus kapital awalnya 
+
+
+
+
+
+
+
+
+
+

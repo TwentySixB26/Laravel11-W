@@ -1,0 +1,60 @@
+cara membuat pagination : 
+
+1. buka web.php cari method posts dan ganti get() menjadi paginate(10) atau bisa juga mengunakan simplePaginate(10) , 10 mengartikan banyak data yang ingin ditampilkan. contoh code :
+
+'posts' => Post::filter(request(['search','category','author']))->latest()->paginate(6) 
+
+
+============================================================================================
+
+
+data yang tampil sudah sebanyak 6,tapi untuk berpindah halaman nya itu belum tampil,untuk menampilkan nya adalah :
+
+1. buka tailwind config, tambahkan code tersebut didalam content nya :
+'./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+
+
+2. buka posts.blade.php tambahkan code ini :
+{{ $posts->links() }}
+
+//posts diambil dari data tabel mana yang ingin ditampilkan 
+
+
+
+===========================================================================================
+
+
+cara menganti atau mengedit tampilan pagination :
+
+1. untuk mengedit pagination nya, harus di unduh/pindahkan ke dalam resources caranya adalah buka terminal :
+php artisan vendor:publish
+
+
+2. maka akan tampil beberapa pilihan, dan pilih atau bisa klik angkanya :
+Provider: Illuminate\Pagination\PaginationServiceProvider
+
+
+3. maka akan tampil di dalam folder resources/views/vendor 
+
+
+4. 
+
+
+==========================================================================================
+
+
+defaultnya adalah pakai tailwind,tapi jika ingin merubah ke bootsrap atau yang lain maka caranya adalah :
+
+1. buka folder providers/AppServiceProvider.php dan cari method boot() edit disitu,contoh code : 
+Paginator::useBootstrapFive() ; 
+
+
+=============================================================================================
+
+untuk mengatasi eror, jika masuk ke categori personal misal totalnya ada 12 dan data yang ingin tampil adalah sebanyak 6 maka paginate akan ada dua buah , harusnya ketika mengklik next atau 2 maka ttp di dalam categori personal tapi ini malah akan mengarah ke semua tampilanya maka halaman 2 itu bukan mengarah ke categori halaman 2 tapi all post halaman 2, untuk mengatasinya adalah :
+
+1. buka web.php dan tambahkan code withQueryString(), contoh full code :
+'posts' => Post::filter(request(['search','category','author']))->latest()->paginate(6)->withQueryString()
+
+
+

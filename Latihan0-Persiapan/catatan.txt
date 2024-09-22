@@ -1,0 +1,13 @@
+System Requirement
+
+1. PHP 8.2 
+2. MySql/Sql Lite 
+3. composer
+4. Web server 
+5. Node js 
+
+jika tidak mau download ke 5nya download 
+6.Laragon 
+
+
+7. table plus  

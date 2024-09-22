@@ -1,0 +1,52 @@
+PEMBAHASAN :
+
+@props() 
+di Laravel digunakan dalam Blade components untuk mendefinisikan dan mengelola properti yang diteruskan ke komponen. Ini memungkinkan kita untuk mengatur atribut default serta menangani properti dinamis yang dikirim dari komponen induk.
+
+Str::limit() 
+di Laravel digunakan untuk membatasi panjang string hingga jumlah karakter tertentu. Jika string melebihi batas yang ditentukan, string akan dipotong, dan tambahan (biasanya elipsis "...") akan ditambahkan di akhir.
+
+
+
+============================================================================================
+
+
+memperbaiki navigasi 
+
+pada case yang sebelumnya kita mengirimkan atribute active yang pada file navbar.blade.php dan ketika di inspect maka attribute active itu akan muncul,nah kita tidak mau itu tejadi oleh sebab itu active akan diubah menjadi property mengunakan @props() dengan cara :
+
+1. buka file nav-link.blade.php 
+
+2. tambahkan code ini : 
+@props(['active',false]) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

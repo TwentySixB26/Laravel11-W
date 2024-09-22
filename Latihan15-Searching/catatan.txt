@@ -1,0 +1,80 @@
+cara menangkap data yang dikirim melalui method get mengunakan request :
+1. buka web.php :
+
+    $posts = Post::latest() ;
+    //mengecek ada data apa yang di serach tidak,jika ada maka code ini akan dieksekusi
+    if (request('search')) {
+        $posts->where('title','like' , '%' . request('search') . '%' ) ;
+    } 
+
+    //jika data tidak ada, atau sudah dilakukan ditag sebelumnya maka akan menjalankan code ini 
+    return view('/posts' , [
+        'title' => 'Blog',
+        'posts' => $posts->get()
+    ]);
+
+
+
+
+problemnya adalah ketika mengklik authornya atau kategori maka akan terjadi eror jika ingin melakukan search mengunakan hal tadi,untuk mengatasinya adalah mengunakan local scope: 
+
+
+1. buka file post.php dan buat method seperti ini beserta codinganya:
+
+public function scopeFilter(Builder $query): void {
+        $query->where('title','like' , '%' . request('search') . '%' ) ;
+}
+
+
+2. buka web.php dan ganti kan code sebelumnya dengan code ini :
+return view('/posts' , [
+        'title' => 'Blog',
+        'posts' => Post::filter()->latest()->get()
+    ]);
+
+code tersebut sama fungsinya seperti cara ke 1,tapi jika kita masuk ke kategori dan menuliskan sesuatu di search maka yang akan tampil adalah berdasarkan kategori tersebut 
+
+
+
+cara menangani ketika masuk ke categori atau author dan mengetikan sesuatu di search :
+
+1.  buka file post.php ganti code sebelumny dengan code  :
+
+ public function scopeFilter(Builder $query, array $filters): void {
+        
+        $query->when($filters['search'] ?? false , function($query,$search){
+            $query->where('title','like' , '%' . $search . '%' ) ;
+        }) ; 
+
+        $query->when($filters['category'] ?? false , function($query,$category){
+            //'category' pada whereHas('category' , function....) itu diambil berdasarkan nama relasinya 
+            $query->whereHas('category', function($query) use($category){
+                $query->where('slug', $category) ;
+            }) ;
+        }) ; 
+    }
+
+
+
+2. buka file web.php dan tambahkan category seperti pada code berikut :
+return view('/posts' , [
+        'title' => 'Blog',
+        'posts' => Post::filter(request(['search','category']))->latest()->get()
+]);
+
+
+
+
+3. buka posts.blade.php dan ganti url nya,seperti ini contohnya beserta tambahkan hidden inputnya :
+//hideen inputnya
+@if (request('category'))
+    <input type="hidden" name="category" value="{{ request('category') }}">
+@endif
+
+//ketika kategori di klik 
+<a href="/posts?category={{ $post->category->slug }}"> </a>
+
+begitu pun dengan author 
+
+
+
